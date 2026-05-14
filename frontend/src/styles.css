@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* MatchMind AI design tokens — neon dark sports theme */
+/* FootyVerse design tokens - neon dark sports theme */
 @theme inline {
   --font-display: "Bebas Neue", "Barlow Condensed", system-ui, sans-serif;
   --font-body: "DM Sans", "Outfit", system-ui, sans-serif;

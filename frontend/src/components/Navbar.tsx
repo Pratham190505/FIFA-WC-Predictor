@@ -17,8 +17,7 @@ export function Navbar() {
           <div className="h-8 w-8 rounded-lg bg-linear-to-br from-neon-cyan to-neon-violet flex items-center justify-center glow-cyan">
             <Trophy className="h-4 w-4 text-black" />
           </div>
-          <span className="font-display text-2xl tracking-wider neon-text">MATCHMIND</span>
-          <span className="hidden sm:inline font-mono text-[10px] text-text-muted uppercase ml-1">AI</span>
+          <span className="font-display text-2xl tracking-wider neon-text">FootyVerse</span>
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2">
           {links.map((l) => (

@@ -4,9 +4,9 @@ import { PredictPage } from "../components/pages/PredictPage";
 export const Route = createFileRoute("/predict")({
   head: () => ({
     meta: [
-      { title: "Match Predictor — MatchMind AI" },
+      { title: "Match Predictor - FootyVerse" },
       { name: "description", content: "Head-to-head AI win probability, sentiment and stats for any World Cup matchup." },
-      { property: "og:title", content: "Match Predictor — MatchMind AI" },
+      { property: "og:title", content: "Match Predictor - FootyVerse" },
       { property: "og:description", content: "Live H2H AI predictions for the World Cup." },
     ],
   }),

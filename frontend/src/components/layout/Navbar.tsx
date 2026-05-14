@@ -22,10 +22,10 @@ export function Navbar() {
       <div className="glass-strong border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
-            <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-neon-cyan to-neon-violet text-[#04121a] group-hover:glow-cyan transition-all">
+            <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg bg-linear-to-br from-neon-cyan to-neon-violet text-[#04121a] group-hover:glow-cyan transition-all">
               <Trophy size={18} strokeWidth={2.5} />
             </span>
-            <span className="font-display text-2xl tracking-widest neon-text hidden sm:inline">MatchMind AI</span>
+            <span className="font-display text-2xl tracking-widest neon-text hidden sm:inline">FootyVerse</span>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
             {links.map((l) => (

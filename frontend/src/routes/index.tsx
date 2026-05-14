@@ -4,9 +4,9 @@ import { HomePage } from "../components/pages/HomePage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MatchMind AI — World Cup Predictions" },
+      { title: "FootyVerse - World Cup Predictions" },
       { name: "description", content: "Premium AI-driven World Cup match prediction and tournament simulation platform." },
-      { property: "og:title", content: "MatchMind AI — World Cup Predictions" },
+      { property: "og:title", content: "FootyVerse - World Cup Predictions" },
       { property: "og:description", content: "AI-driven match predictions, bracket simulation and team analytics." },
     ],
   }),

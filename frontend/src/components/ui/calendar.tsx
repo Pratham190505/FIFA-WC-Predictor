@@ -7,6 +7,8 @@ import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 
+const MONTH_FORMATTER = new Intl.DateTimeFormat("en-US", { month: "short" });
+
 function Calendar({
   className,
   classNames,
@@ -25,14 +27,14 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "bg-background group/calendar p-3 [--cell-size:2rem] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatMonthDropdown: (date) => MONTH_FORMATTER.format(date),
         ...formatters,
       }}
       classNames={{
@@ -154,7 +156,7 @@ function CalendarDayButton({
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString()}
+      data-day={day.date.toISOString().slice(0, 10)}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&

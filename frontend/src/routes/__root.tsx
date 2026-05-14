@@ -3,6 +3,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import appCss from "../styles.css?url";
 import { AppProvider } from "../store/appContext";
 import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/layout/Footer";
 import { DeepNavyBackground } from "../components/three/DeepNavyBackground";
 import { ParticleField } from "../components/three/ParticleField";
 
@@ -33,14 +34,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "FootyVerse" },
+      { name: "description", content: "AI-powered FIFA World Cup predictions, tournament simulations, and team analytics." },
+      { name: "author", content: "FootyVerse" },
+      { property: "og:title", content: "FootyVerse" },
+      { property: "og:description", content: "AI-powered FIFA World Cup predictions, tournament simulations, and team analytics." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@FootyVerse" },
     ],
     links: [
       {
@@ -78,9 +79,7 @@ function RootComponent() {
         <main className="flex-1">
           <Outlet />
         </main>
-        <footer className="border-t border-white/5 py-8 text-center font-mono text-xs text-text-muted">
-          MatchMind AI · Predictive engine v3.2 · © 2026
-        </footer>
+        <Footer />
       </div>
     </AppProvider>
   );

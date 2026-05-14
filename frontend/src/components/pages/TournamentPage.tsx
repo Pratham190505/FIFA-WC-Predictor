@@ -41,6 +41,12 @@ type Standing = {
   gd: number;
 };
 
+const RUN_LABELS: Record<number, string> = {
+  1000: "1,000",
+  10000: "10,000",
+  100000: "100,000",
+};
+
 function MatchBox({
   m,
   highlight = false,
@@ -237,7 +243,7 @@ export function TournamentPage() {
                 : "glass text-text-muted hover:text-text-primary"
             }`}
           >
-            {n.toLocaleString()}
+            {RUN_LABELS[n]}
           </button>
         ))}
       </div>
