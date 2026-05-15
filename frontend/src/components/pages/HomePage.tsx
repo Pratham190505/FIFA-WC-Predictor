@@ -64,8 +64,7 @@ export function HomePage() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 text-lg text-text-muted max-w-xl"
             >
-              AI-powered FIFA World Cup predictions, tournament simulations and deep team analytics
-              — all in one futuristic dashboard.
+              Explore match forecasts, bracket runs, and team form from one focused dashboard.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 12 }}

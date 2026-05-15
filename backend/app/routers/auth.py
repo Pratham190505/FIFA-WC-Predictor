@@ -11,8 +11,7 @@ async def register(data: UserRegister):
     """
     Register a new user.
     - Password must be at least 8 characters
-    - Password must contain at least one uppercase letter
-    - Password must contain at least one digit
+    - Password must contain at least one special character
     """
     return await register_user(data)
 

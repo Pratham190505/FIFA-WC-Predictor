@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TournamentRouteImport } from './routes/tournament'
 import { Route as TeamsRouteImport } from './routes/teams'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PredictRouteImport } from './routes/predict'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -25,9 +27,19 @@ const TeamsRoute = TeamsRouteImport.update({
   path: '/teams',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PredictRoute = PredictRouteImport.update({
   id: '/predict',
   path: '/predict',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -44,14 +56,18 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/login': typeof LoginRoute
   '/predict': typeof PredictRoute
+  '/signup': typeof SignupRoute
   '/teams': typeof TeamsRoute
   '/tournament': typeof TournamentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/login': typeof LoginRoute
   '/predict': typeof PredictRoute
+  '/signup': typeof SignupRoute
   '/teams': typeof TeamsRoute
   '/tournament': typeof TournamentRoute
 }
@@ -59,22 +75,48 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/login': typeof LoginRoute
   '/predict': typeof PredictRoute
+  '/signup': typeof SignupRoute
   '/teams': typeof TeamsRoute
   '/tournament': typeof TournamentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/predict' | '/teams' | '/tournament'
+  fullPaths:
+    | '/'
+    | '/analytics'
+    | '/login'
+    | '/predict'
+    | '/signup'
+    | '/teams'
+    | '/tournament'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analytics' | '/predict' | '/teams' | '/tournament'
-  id: '__root__' | '/' | '/analytics' | '/predict' | '/teams' | '/tournament'
+  to:
+    | '/'
+    | '/analytics'
+    | '/login'
+    | '/predict'
+    | '/signup'
+    | '/teams'
+    | '/tournament'
+  id:
+    | '__root__'
+    | '/'
+    | '/analytics'
+    | '/login'
+    | '/predict'
+    | '/signup'
+    | '/teams'
+    | '/tournament'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  LoginRoute: typeof LoginRoute
   PredictRoute: typeof PredictRoute
+  SignupRoute: typeof SignupRoute
   TeamsRoute: typeof TeamsRoute
   TournamentRoute: typeof TournamentRoute
 }
@@ -95,11 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/predict': {
       id: '/predict'
       path: '/predict'
       fullPath: '/predict'
       preLoaderRoute: typeof PredictRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -122,7 +178,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
+  LoginRoute: LoginRoute,
   PredictRoute: PredictRoute,
+  SignupRoute: SignupRoute,
   TeamsRoute: TeamsRoute,
   TournamentRoute: TournamentRoute,
 }

@@ -1,7 +1,7 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Navigate, Scripts, useLocation } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AppProvider } from "../store/appContext";
+import { AppProvider, AuthProvider, useAuth } from "../store/appContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/layout/Footer";
 import { DeepNavyBackground } from "../components/three/DeepNavyBackground";
@@ -35,10 +35,10 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "FootyVerse" },
-      { name: "description", content: "AI-powered FIFA World Cup predictions, tournament simulations, and team analytics." },
+      { name: "description", content: "FootyVerse football intelligence dashboard." },
       { name: "author", content: "FootyVerse" },
       { property: "og:title", content: "FootyVerse" },
-      { property: "og:description", content: "AI-powered FIFA World Cup predictions, tournament simulations, and team analytics." },
+      { property: "og:description", content: "FootyVerse football intelligence dashboard." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@FootyVerse" },
@@ -47,6 +47,15 @@ export const Route = createRootRoute({
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon.png",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/favicon.png",
       },
     ],
   }),
@@ -72,6 +81,40 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <AppProvider>
+      <AuthProvider>
+        <AuthGate />
+      </AuthProvider>
+    </AppProvider>
+  );
+}
+
+function AuthGate() {
+  const { isLoggedIn, isLoading } = useAuth();
+  const location = useLocation();
+  const isAuthRoute = location.pathname === "/login" || location.pathname === "/signup";
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg px-4">
+        <div className="glass-strong rounded-lg px-6 py-5 text-sm text-text-muted">Loading FootyVerse...</div>
+      </div>
+    );
+  }
+
+  if (!isLoggedIn && !isAuthRoute) {
+    return <Navigate to="/signup" replace />;
+  }
+
+  if (isLoggedIn && isAuthRoute) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (isAuthRoute) {
+    return <Outlet />;
+  }
+
+  return (
+    <>
       <DeepNavyBackground />
       <ParticleField />
       <div className="min-h-screen flex flex-col">
@@ -81,6 +124,6 @@ function RootComponent() {
         </main>
         <Footer />
       </div>
-    </AppProvider>
+    </>
   );
 }
