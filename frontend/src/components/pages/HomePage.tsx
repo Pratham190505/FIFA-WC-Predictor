@@ -5,7 +5,6 @@ import { ParticleBackground } from "../layout/ParticleBackground";
 import { NeonButton } from "../ui/NeonButton";
 import { GlassCard } from "../ui/GlassCard";
 import { SectionTitle } from "../ui/SectionTitle";
-import { MatchCard } from "../cards/MatchCard";
 import { TeamCard } from "../cards/TeamCard";
 import { ProbabilityBar } from "../ui/ProbabilityBar";
 import { CountUp } from "../ui/CountUp";
@@ -137,15 +136,6 @@ export function HomePage() {
       </section>
 
       <section className="relative max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <SectionTitle eyebrow="Live feed" title="Trending Predictions" />
-        <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-          {TRENDING.map((m) => (
-            <MatchCard key={m.id} match={m} />
-          ))}
-        </div>
-      </section>
-
-      <section className="relative max-w-7xl mx-auto px-4 md:px-8 py-16">
         <SectionTitle eyebrow="Power rankings" title="Top Teams" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {topTeams.map((t) => (
@@ -154,48 +144,11 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="relative py-16">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="rounded-3xl glass-strong border border-white/10 p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-80 h-80 bg-neon-violet/20 blur-3xl rounded-full" />
-            <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-neon-cyan/20 blur-3xl rounded-full" />
-            <div className="relative grid gap-8 md:grid-cols-3">
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-neon-cyan mb-2">
-                  Championship favorite
-                </p>
-                <p className="font-display text-3xl tracking-wide">🇧🇷 Brazil</p>
-                <p className="font-mono text-4xl neon-text mt-2">
-                  <CountUp end={18.4} decimals={1} suffix="%" />
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-neon-cyan mb-2">
-                  Most predicted upset
-                </p>
-                <p className="font-display text-3xl tracking-wide">🇲🇦 vs 🇧🇪</p>
-                <p className="font-mono text-4xl mt-2" style={{ color: "var(--neon-violet)" }}>
-                  <CountUp end={32} suffix="%" /> chance
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-neon-cyan mb-2">
-                  Total simulations
-                </p>
-                <p className="font-display text-3xl tracking-wide">All time</p>
-                <p className="font-mono text-4xl neon-text-gold mt-2">
-                  <CountUp end={1284931} />
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="relative max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {[
-            { label: "Simulations", end: 10000, suffix: "+", icon: Zap },
+            { label: "Simulations", end: 100, suffix: "+", icon: Zap },
             { label: "Teams analyzed", end: 32, suffix: "", icon: Trophy },
             { label: "Prediction accuracy", end: 94, suffix: "%", icon: Sparkles },
             { label: "Predictions made", end: 500000, suffix: "+", icon: Trophy },

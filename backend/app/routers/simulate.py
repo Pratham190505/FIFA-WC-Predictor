@@ -11,7 +11,7 @@ async def run_tournament_simulation(req: SimulateRequest):
     Simulate a full FIFA World Cup tournament.
     - Runs N Monte Carlo simulations to compute championship probabilities
     - Also returns one full bracket for visual display
-    - n_simulations: 100 (fast) to 50000 (slow but accurate)
+    - n_simulations: 50, 75, or 100
     """
     return await simulate_tournament(
         n_simulations=req.n_simulations,

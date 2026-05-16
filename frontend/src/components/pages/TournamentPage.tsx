@@ -11,6 +11,11 @@ import TeamFlag from "../ui/TeamFlag";
 
 import { useSimulate } from "../../hooks/useSimulate";
 import { getFlagUrl } from "@/data/flagMap";
+import {
+  DEFAULT_SIMULATION_COUNT,
+  SIMULATION_COUNTS,
+  type SimulationCount,
+} from "@/lib/simulation";
 
 import {
   BarChart,
@@ -41,10 +46,10 @@ type Standing = {
   gd: number;
 };
 
-const RUN_LABELS: Record<number, string> = {
-  1000: "1,000",
-  10000: "10,000",
-  100000: "100,000",
+const RUN_LABELS: Record<SimulationCount, string> = {
+  50: "50",
+  75: "75",
+  100: "100",
 };
 
 function MatchBox({
@@ -160,11 +165,7 @@ function GroupCard({
 
 export function TournamentPage() {
   const { simulate, result, loading, error } = useSimulate();
-  const [runs, setRuns] = useState(1000);
-
-  useEffect(() => {
-    simulate(1000);
-  }, []);
+  const [runs, setRuns] = useState<SimulationCount>(DEFAULT_SIMULATION_COUNT);
 
   useEffect(() => {
     if (result?.bracket.winner) {
@@ -193,13 +194,14 @@ export function TournamentPage() {
         <PageHeader
           eyebrow="Monte Carlo"
           title="WORLD CUP SIMULATOR"
-          subtitle="Run thousands of simulations and watch the bracket unfold."
+          subtitle="Run hundreds of simulations and watch the bracket unfold."
         />
 
         <div className="flex flex-wrap gap-3">
           <NeonButton
             variant="primary"
             loading={loading}
+            disabled={loading}
             onClick={() => simulate(runs)}
           >
             <Play size={16} />
@@ -208,9 +210,9 @@ export function TournamentPage() {
 
           <NeonButton
             variant="ghost"
+            disabled={loading}
             onClick={() => {
-              setRuns(1000);
-              simulate(1000);
+              setRuns(DEFAULT_SIMULATION_COUNT);
             }}
           >
             <RotateCcw size={16} />
@@ -230,13 +232,13 @@ export function TournamentPage() {
           Simulations:
         </span>
 
-        {[1000, 10000, 100000].map((n) => (
+        {SIMULATION_COUNTS.map((n) => (
           <button
             key={n}
             onClick={() => {
               setRuns(n);
-              simulate(n);
             }}
+            disabled={loading}
             className={`px-4 py-2 rounded-lg font-mono text-xs border transition-all ${
               runs === n
                 ? "bg-neon-cyan/15 border-neon-cyan/50 text-neon-cyan"

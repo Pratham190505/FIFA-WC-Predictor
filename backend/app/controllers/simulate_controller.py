@@ -3,7 +3,7 @@ import torch
 import random
 from app.core.ml_loader import get_models
 from app.controllers.predict_controller import build_feature_vector
-
+MATCH_CACHE = {}
 
 # ── Default WC 2022 Groups ────────────────────────────────
 DEFAULT_GROUPS = {
@@ -24,13 +24,23 @@ def simulate_single_match(home: str, away: str, models: dict, knockout: bool = F
     In knockout mode draws are resolved by penalty shootout.
     """
     try:
-        x_raw = build_feature_vector(home, away, True, models)   # WC = neutral venue
-        x     = models["scaler"].transform(x_raw)
-        x_t   = torch.FloatTensor(x)
+        cache_key = f"{home}-{away}"
 
-        with torch.no_grad():
-            probs     = torch.softmax(models["match_predictor"](x_t), dim=1).numpy()[0]
-            sh, sa    = models["score_predictor"](x_t)
+        if cache_key not in MATCH_CACHE:
+            x_raw = build_feature_vector(home, away, True, models)
+            MATCH_CACHE[cache_key] = models["scaler"].transform(x_raw)
+
+        x = MATCH_CACHE[cache_key]
+        x_t = torch.tensor(x, dtype=torch.float32)
+
+        with torch.inference_mode():
+
+            probs = torch.softmax(
+                models["match_predictor"](x_t),
+                dim=1
+            ).numpy()[0]
+
+            sh, sa = models["score_predictor"](x_t)
             pred_sh   = max(0, round(float(sh[0][0])))
             pred_sa   = max(0, round(float(sa[0][0])))
 
@@ -187,53 +197,118 @@ def run_knockout_bracket(qualified: list, models: dict):
     return bracket
 
 
-async def simulate_tournament(n_simulations: int = 1000, custom_groups: dict = None) -> dict:
+async def simulate_tournament(n_simulations: int = 50, custom_groups: dict = None) -> dict:
+
     models = get_models()
 
     if not models:
         from fastapi import HTTPException
-        raise HTTPException(status_code=503, detail="ML models not loaded")
+        raise HTTPException(
+            status_code=503,
+            detail="ML models not loaded"
+        )
 
     groups = custom_groups or DEFAULT_GROUPS
+
+    # ------------------------------------------------------------------
+    # LIMIT SIMULATIONS TO PREVENT SERVER FREEZE
+    # ------------------------------------------------------------------
+    MAX_SIMULATIONS = 100
+
+    if n_simulations > MAX_SIMULATIONS:
+        print(
+            f"Requested {n_simulations} simulations. "
+            f"Limiting to {MAX_SIMULATIONS} for performance."
+        )
+        n_simulations = MAX_SIMULATIONS
 
     champion_counts = {}
     finalist_counts = {}
 
-    print(f"Running {n_simulations} simulations...")
+    print(f"Running {n_simulations} tournament simulations...")
 
+    # ------------------------------------------------------------------
+    # MAIN MONTE CARLO LOOP
+    # ------------------------------------------------------------------
     for i in range(n_simulations):
-        _, qualified = run_group_stage(groups, models)
-        bracket      = run_knockout_bracket(qualified, models)
 
-        champ = bracket.get("winner")
-        if champ:
-            champion_counts[champ] = champion_counts.get(champ, 0) + 1
+        # Progress logging
+        if i % 10 == 0:
+            print(f"Completed {i}/{n_simulations}")
 
-        # Track finalists
-        if bracket.get("final"):
-            for match in bracket["final"]:
-                for team in [match["home"], match["away"]]:
-                    finalist_counts[team] = finalist_counts.get(team, 0) + 1
+        try:
+            _, qualified = run_group_stage(groups, models)
 
-    # Convert to percentages
+            bracket = run_knockout_bracket(
+                qualified,
+                models
+            )
+
+            champ = bracket.get("winner")
+
+            if champ:
+                champion_counts[champ] = (
+                    champion_counts.get(champ, 0) + 1
+                )
+
+            # Track finalists
+            if bracket.get("final"):
+
+                for match in bracket["final"]:
+
+                    for team in [match["home"], match["away"]]:
+
+                        finalist_counts[team] = (
+                            finalist_counts.get(team, 0) + 1
+                        )
+
+        except Exception as e:
+            print(f"Simulation {i} failed: {str(e)}")
+            continue
+
+    print("All simulations completed successfully")
+
+    # ------------------------------------------------------------------
+    # CONVERT COUNTS TO PERCENTAGES
+    # ------------------------------------------------------------------
     champion_probs = {
         t: round(c / n_simulations * 100, 2)
-        for t, c in sorted(champion_counts.items(), key=lambda x: -x[1])
+        for t, c in sorted(
+            champion_counts.items(),
+            key=lambda x: -x[1]
+        )
     }
+
     finalist_probs = {
         t: round(c / n_simulations * 100, 2)
-        for t, c in sorted(finalist_counts.items(), key=lambda x: -x[1])
+        for t, c in sorted(
+            finalist_counts.items(),
+            key=lambda x: -x[1]
+        )
     }
 
-    # Run one deterministic simulation for bracket display
-    group_results, qualified = run_group_stage(groups, models)
-    bracket                  = run_knockout_bracket(qualified, models)
+    # ------------------------------------------------------------------
+    # SINGLE BRACKET FOR UI DISPLAY
+    # ------------------------------------------------------------------
+    print("Generating final display bracket...")
+
+    group_results, qualified = run_group_stage(
+        groups,
+        models
+    )
+
+    bracket = run_knockout_bracket(
+        qualified,
+        models
+    )
+
+    print("Tournament simulation completed")
 
     return {
-        "group_stage":            group_results,
-        "qualified_teams":        qualified,
-        "bracket":                bracket,
+        "group_stage": group_results,
+        "qualified_teams": qualified,
+        "bracket": bracket,
         "champion_probabilities": champion_probs,
         "finalist_probabilities": finalist_probs,
-        "n_simulations":          n_simulations,
+        "n_simulations": n_simulations,
     }

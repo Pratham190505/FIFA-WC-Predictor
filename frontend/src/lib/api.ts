@@ -1,4 +1,5 @@
 import api from "./axios";
+import { DEFAULT_SIMULATION_COUNT, type SimulationCount } from "./simulation";
 
 // ── Auth ──────────────────────────────────────────────────
 export const authAPI = {
@@ -39,7 +40,7 @@ export const predictAPI = {
 
 // ── Tournament Simulator ──────────────────────────────────
 export const simulateAPI = {
-  runTournament: (n_simulations = 1000) =>
+  runTournament: (n_simulations: SimulationCount = DEFAULT_SIMULATION_COUNT) =>
     api.post("/simulate/tournament", { n_simulations }),
 };
 

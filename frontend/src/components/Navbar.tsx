@@ -18,6 +18,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <img src="/footyverse-logo.png" alt="FootyVerse" className="h-10 w-auto rounded-sm" />
+          <span className="font-display text-2xl tracking-widest neon-text">FootyVerse</span>
         </Link>
         <div className="flex items-center gap-2">
           <nav className="hidden items-center gap-1 sm:flex sm:gap-2">

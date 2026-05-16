@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { simulateAPI } from "../lib/api";
+import { DEFAULT_SIMULATION_COUNT, type SimulationCount } from "../lib/simulation";
 
 export interface SimulateResult {
   group_stage: Record<string, {
@@ -20,7 +21,7 @@ export interface SimulateResult {
   };
   champion_probabilities: Record<string, number>;
   finalist_probabilities: Record<string, number>;
-  n_simulations: number;
+  n_simulations: SimulationCount;
 }
 
 interface BracketMatch {
@@ -36,8 +37,14 @@ export function useSimulate() {
   const [result, setResult] = useState<SimulateResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inFlightRef = useRef(false);
 
-  const simulate = async (nSimulations = 1000) => {
+  const simulate = async (nSimulations: SimulationCount = DEFAULT_SIMULATION_COUNT) => {
+    if (inFlightRef.current) {
+      return;
+    }
+
+    inFlightRef.current = true;
     setLoading(true);
     setError(null);
     setResult(null);
@@ -50,6 +57,7 @@ export function useSimulate() {
           "Simulation failed. Make sure the backend is running."
       );
     } finally {
+      inFlightRef.current = false;
       setLoading(false);
     }
   };

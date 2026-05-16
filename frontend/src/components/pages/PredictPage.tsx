@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Sparkles } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "../ui/SectionTitle";
 import { GlassCard } from "../ui/GlassCard";
 import { NeonButton } from "../ui/NeonButton";
@@ -9,6 +10,11 @@ import { TEAMS, teamById, sumGoals } from "@/data/mockData";
 import { useApp } from "@/store/appContext";
 import TeamFlag from "../ui/TeamFlag";
 import { usePredict } from "../../hooks/usePredict";
+
+type SubmittedMatch = {
+  homeId: string;
+  awayId: string;
+};
 
 function TeamSelect({
   value,
@@ -52,18 +58,24 @@ function TeamSelect({
 export function PredictPage() {
   const { selectedHomeId, selectedAwayId, setSelectedHomeId, setSelectedAwayId } = useApp();
   const { predict, result: apiResult, loading: apiLoading, error: apiError } = usePredict();
+  const [submittedMatch, setSubmittedMatch] = useState<SubmittedMatch | null>(null);
 
   const handlePredict = async () => {
     if (selectedHomeId === selectedAwayId) return;
+    setSubmittedMatch({ homeId: selectedHomeId, awayId: selectedAwayId });
     await predict(selectedHomeId, selectedAwayId, true);
   };
 
   const home = teamById(selectedHomeId);
   const away = teamById(selectedAwayId);
-  const displayResult = apiResult
+  const hasFreshResult =
+    apiResult &&
+    submittedMatch?.homeId === selectedHomeId &&
+    submittedMatch?.awayId === selectedAwayId;
+  const displayResult = hasFreshResult
     ? {
-        home: teamById(selectedHomeId),
-        away: teamById(selectedAwayId),
+        home: teamById(submittedMatch.homeId),
+        away: teamById(submittedMatch.awayId),
         r: {
           homeProb: apiResult.home_win_prob,
           drawProb: apiResult.draw_prob,
@@ -143,6 +155,7 @@ export function PredictPage() {
             <NeonButton
               onClick={handlePredict}
               loading={apiLoading}
+              disabled={apiLoading || selectedHomeId === selectedAwayId}
               variant="primary"
               size="lg"
               className="w-full"

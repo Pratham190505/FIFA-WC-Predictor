@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Literal, Optional, List
 from datetime import datetime
 
 
@@ -29,7 +29,7 @@ class MatchPredictResponse(BaseModel):
 # ── Tournament Simulation ─────────────────────────────────
 
 class SimulateRequest(BaseModel):
-    n_simulations: int = Field(1000, ge=100, le=50000)
+    n_simulations: Literal[50, 75, 100] = 50
     custom_groups: Optional[dict] = None
 
 

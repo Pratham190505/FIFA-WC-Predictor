@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { predictAPI } from "../lib/api";
 
 export interface PredictResult {
@@ -36,12 +36,18 @@ export function usePredict() {
   const [result, setResult] = useState<PredictResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inFlightRef = useRef(false);
 
   const predict = async (
     homeTeamId: string,
     awayTeamId: string,
     isNeutral = true
   ) => {
+    if (inFlightRef.current) {
+      return;
+    }
+
+    inFlightRef.current = true;
     setLoading(true);
     setError(null);
     setResult(null);
@@ -63,6 +69,7 @@ export function usePredict() {
           "Prediction failed. Make sure the backend is running and models are trained."
       );
     } finally {
+      inFlightRef.current = false;
       setLoading(false);
     }
   };
