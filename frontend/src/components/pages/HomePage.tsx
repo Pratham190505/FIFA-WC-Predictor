@@ -8,13 +8,19 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { TeamCard } from "../cards/TeamCard";
 import { ProbabilityBar } from "../ui/ProbabilityBar";
 import { CountUp } from "../ui/CountUp";
-import { TEAMS, TRENDING, teamById } from "@/data/mockData";
+import { TEAMS, teamById } from "@/data/mockData";
 import { Globe3D } from "../three/Globe3D";
 import TeamFlag from "../ui/TeamFlag";
 
 export function HomePage() {
   const topTeams = [...TEAMS].sort((a, b) => a.fifaRank - b.fifaRank).slice(0, 6);
-  const featured = TRENDING[0];
+  const featured = {
+    homeId: "BRA",
+    awayId: "ARG",
+    homeProb: 48,
+    awayProb: 30,
+    predictedScore: [2, 1] as const,
+  };
   const fHome = teamById(featured.homeId);
   const fAway = teamById(featured.awayId);
   const { scrollY } = useScroll();
@@ -140,28 +146,6 @@ export function HomePage() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {topTeams.map((t) => (
             <TeamCard key={t.id} team={t} />
-          ))}
-        </div>
-      </section>
-
-
-      <section className="relative max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {[
-            { label: "Simulations", end: 100, suffix: "+", icon: Zap },
-            { label: "Teams analyzed", end: 32, suffix: "", icon: Trophy },
-            { label: "Prediction accuracy", end: 94, suffix: "%", icon: Sparkles },
-            { label: "Predictions made", end: 500000, suffix: "+", icon: Trophy },
-          ].map((s) => (
-            <GlassCard key={s.label} glow="cyan" className="text-center">
-              <s.icon size={20} className="mx-auto mb-3 text-neon-cyan" />
-              <p className="font-mono text-3xl md:text-4xl font-bold neon-text">
-                <CountUp end={s.end} suffix={s.suffix} />
-              </p>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-text-muted mt-2">
-                {s.label}
-              </p>
-            </GlassCard>
           ))}
         </div>
       </section>
