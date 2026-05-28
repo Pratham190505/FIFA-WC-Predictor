@@ -96,6 +96,242 @@ function MatchBox({
   );
 }
 
+function BracketTeamLine({
+  team,
+  score,
+  winner,
+}: {
+  team: string;
+  score: string;
+  winner: boolean;
+}) {
+  const flagUrl = getFlagUrl(team, 40);
+
+  return (
+    <div
+      className={`flex h-6 items-center justify-between border border-slate-300 bg-white px-1.5 text-[11px] shadow-sm ${
+        winner ? "font-bold text-slate-950" : "text-slate-700"
+      }`}
+    >
+      <span className="flex min-w-0 items-center gap-1.5">
+        {flagUrl && (
+          <img
+            src={flagUrl}
+            alt={`${team} flag`}
+            loading="lazy"
+            className="h-3.5 w-5 shrink-0 border border-slate-300 object-cover"
+          />
+        )}
+        <span className="truncate font-mono">{team}</span>
+      </span>
+      <span className="ml-2 shrink-0 font-mono text-[10px] text-slate-500">{score.trim()}</span>
+    </div>
+  );
+}
+
+function KnockoutMatchCard({
+  match,
+  style,
+  final = false,
+}: {
+  match: BracketMatch;
+  style: React.CSSProperties;
+  final?: boolean;
+}) {
+  const [homeScore = "-", awayScore = "-"] = match.score?.split("-") ?? [];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -16 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.35 }}
+      className={`absolute z-10 w-56 ${final ? "drop-shadow-[0_0_18px_rgba(255,215,0,0.5)]" : ""}`}
+      style={style}
+    >
+      <BracketTeamLine
+        team={match.home}
+        score={homeScore}
+        winner={match.winner === match.home}
+      />
+      <BracketTeamLine
+        team={match.away}
+        score={awayScore}
+        winner={match.winner === match.away}
+      />
+    </motion.div>
+  );
+}
+
+function Connector({
+  fromX,
+  toX,
+  fromY,
+  toY,
+}: {
+  fromX: number;
+  toX: number;
+  fromY: number;
+  toY: number;
+}) {
+  const midX = fromX + (toX - fromX) / 2;
+  const top = Math.min(fromY, toY);
+  const height = Math.abs(toY - fromY);
+
+  return (
+    <>
+      <div
+        className="absolute z-0 h-0.5 bg-white/80"
+        style={{ left: fromX, top: fromY, width: midX - fromX }}
+      />
+      <div
+        className="absolute z-0 w-0.5 bg-white/80"
+        style={{ left: midX, top, height }}
+      />
+      <div
+        className="absolute z-0 h-0.5 bg-white/80"
+        style={{ left: midX, top: toY, width: toX - midX }}
+      />
+    </>
+  );
+}
+
+function RoundLabel({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
+  return (
+    <p
+      className="absolute top-0 font-mono text-[10px] uppercase tracking-[0.22em] text-white/75"
+      style={style}
+    >
+      {children}
+    </p>
+  );
+}
+
+function WorldCupBracket({
+  roundOf16,
+  quarterFinals,
+  semiFinals,
+  final,
+  champion,
+}: {
+  roundOf16: BracketMatch[];
+  quarterFinals: BracketMatch[];
+  semiFinals: BracketMatch[];
+  final: BracketMatch[];
+  champion: string;
+}) {
+  const cardWidth = 224;
+  const cardHeight = 48;
+  const x = {
+    r16: 24,
+    qf: 314,
+    sf: 604,
+    final: 842,
+    champion: 1004,
+  };
+  const y = {
+    r16: roundOf16.map((_, index) => 54 + index * 82),
+    qf: quarterFinals.map((_, index) => 95 + index * 164),
+    sf: semiFinals.map((_, index) => 177 + index * 328),
+    final: final.map((_, index) => 341 + index * 82),
+  };
+
+  return (
+    <div className="overflow-x-auto pb-4">
+      <div className="relative h-190 min-w-305 overflow-hidden rounded-xl border border-cyan-200/20 bg-[#0573ad] shadow-[inset_0_0_80px_rgba(0,0,0,0.28)]">
+        <div className="absolute inset-0 opacity-25 grid-overlay" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_35%_45%,rgba(255,255,255,0.12),transparent_45%),linear-gradient(135deg,rgba(0,240,255,0.16),transparent_48%,rgba(0,0,0,0.16))]" />
+
+        <RoundLabel style={{ left: x.r16, top: 20 }}>Round of 16</RoundLabel>
+        <RoundLabel style={{ left: x.qf, top: 20 }}>Quarter-finals</RoundLabel>
+        <RoundLabel style={{ left: x.sf, top: 20 }}>Semi-finals</RoundLabel>
+        <RoundLabel style={{ left: x.final, top: 300 }}>Final</RoundLabel>
+
+        {quarterFinals.map((_, index) => (
+          <Connector
+            key={`r16-qf-${index}`}
+            fromX={x.r16 + cardWidth}
+            toX={x.qf}
+            fromY={y.r16[index * 2] + cardHeight / 2}
+            toY={y.qf[index] + cardHeight / 2}
+          />
+        ))}
+        {semiFinals.map((_, index) => (
+          <Connector
+            key={`qf-sf-${index}`}
+            fromX={x.qf + cardWidth}
+            toX={x.sf}
+            fromY={y.qf[index * 2] + cardHeight / 2}
+            toY={y.sf[index] + cardHeight / 2}
+          />
+        ))}
+        {final.map((_, index) => (
+          <Connector
+            key={`sf-final-${index}`}
+            fromX={x.sf + cardWidth}
+            toX={x.final}
+            fromY={y.sf[index * 2] + cardHeight / 2}
+            toY={y.final[index] + cardHeight / 2}
+          />
+        ))}
+        {final[0] && (
+          <Connector
+            fromX={x.final + cardWidth}
+            toX={x.champion}
+            fromY={y.final[0] + cardHeight / 2}
+            toY={y.final[0] + cardHeight / 2}
+          />
+        )}
+
+        {roundOf16.map((match, index) => (
+          <KnockoutMatchCard
+            key={`r16-${match.home}-${match.away}-${index}`}
+            match={match}
+            style={{ left: x.r16, top: y.r16[index] }}
+          />
+        ))}
+        {quarterFinals.map((match, index) => (
+          <KnockoutMatchCard
+            key={`qf-${match.home}-${match.away}-${index}`}
+            match={match}
+            style={{ left: x.qf, top: y.qf[index] }}
+          />
+        ))}
+        {semiFinals.map((match, index) => (
+          <KnockoutMatchCard
+            key={`sf-${match.home}-${match.away}-${index}`}
+            match={match}
+            style={{ left: x.sf, top: y.sf[index] }}
+          />
+        ))}
+        {final.map((match, index) => (
+          <KnockoutMatchCard
+            key={`final-${match.home}-${match.away}-${index}`}
+            match={match}
+            final
+            style={{ left: x.final, top: y.final[index] }}
+          />
+        ))}
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.45, duration: 0.4 }}
+          className="absolute z-20 w-44 text-center"
+          style={{ left: x.champion, top: 257 }}
+        >
+          <Trophy size={50} className="mx-auto mb-3 text-neon-gold drop-shadow-[0_0_14px_rgba(255,215,0,0.75)]" />
+          <p className="mb-2 text-[10px] font-mono uppercase tracking-widest text-white/80">
+            Champions
+          </p>
+          <div className="border border-yellow-300 bg-yellow-400 px-2 py-2 text-sm font-black uppercase tracking-wide text-slate-950 shadow-[0_0_20px_rgba(255,215,0,0.5)]">
+            {champion}
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 function GroupCard({
   group,
   standings,
@@ -296,36 +532,13 @@ export function TournamentPage() {
             </GlassCard>
           </motion.div>
 
-          <div className="overflow-x-auto pb-4">
-            <div className="grid grid-cols-4 gap-4 md:gap-6 min-w-250">
-              {[
-                { round: "Round of 16", matches: result.bracket.round_of_16 },
-                { round: "Quarter-Final", matches: result.bracket.quarter_finals },
-                { round: "Semi-Final", matches: result.bracket.semi_finals },
-                { round: "Final", matches: result.bracket.final },
-              ].map((col, ci) => (
-                <div key={col.round} className="space-y-3">
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-neon-cyan mb-2">
-                    {col.round}
-                  </p>
-
-                  {col.matches.map((m, mi) => (
-                    <motion.div
-                      key={`${col.round}-${m.home}-${m.away}-${mi}`}
-                      initial={{ opacity: 0, x: -16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        delay: ci * 0.15 + mi * 0.04,
-                      }}
-                    >
-                      <MatchBox m={m} highlight={ci === 3} />
-                    </motion.div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+          <WorldCupBracket
+            roundOf16={result.bracket.round_of_16}
+            quarterFinals={result.bracket.quarter_finals}
+            semiFinals={result.bracket.semi_finals}
+            final={result.bracket.final}
+            champion={champion}
+          />
 
           <div className="mt-16">
             <SectionTitle

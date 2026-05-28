@@ -1,0 +1,134 @@
+.shootout-stadium {
+  background:
+    radial-gradient(ellipse at 50% -8%, rgba(245, 247, 250, 0.2), transparent 32%),
+    radial-gradient(ellipse at 13% 12%, rgba(0, 240, 255, 0.28), transparent 24%),
+    radial-gradient(ellipse at 87% 12%, rgba(255, 255, 255, 0.2), transparent 25%),
+    linear-gradient(180deg, #010714 0%, #06162f 42%, #082414 100%);
+}
+
+.shootout-crowd {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(0, 240, 255, 0.16) 1px, transparent 2px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 2px);
+  background-position: 0 0, 8px 7px, 22px 19px;
+  background-size: 28px 16px, 34px 24px, 30px 22px;
+}
+
+.shootout-light-beam {
+  background: linear-gradient(180deg, rgba(190, 235, 255, 0.28), rgba(0, 240, 255, 0.04) 52%, transparent);
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  animation: shootoutBeam 5.8s ease-in-out infinite alternate;
+  transform-origin: top;
+}
+
+.shootout-fog {
+  background:
+    radial-gradient(ellipse at 35% 70%, rgba(0, 240, 255, 0.1), transparent 36%),
+    radial-gradient(ellipse at 70% 62%, rgba(255, 255, 255, 0.08), transparent 34%);
+  animation: shootoutFog 8s ease-in-out infinite alternate;
+}
+
+.shootout-grass {
+  background:
+    repeating-linear-gradient(92deg, rgba(255, 255, 255, 0.045) 0 42px, rgba(255, 255, 255, 0.012) 42px 86px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px),
+    radial-gradient(ellipse at 50% 0%, rgba(110, 255, 173, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(16, 92, 45, 0.9), #061d11 78%);
+  background-size: 160px 100%, 100% 12px, 100% 100%, 100% 100%;
+}
+
+.shootout-net {
+  background:
+    repeating-linear-gradient(12deg, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(102deg, rgba(255, 255, 255, 0.13) 0 1px, transparent 1px 22px),
+    linear-gradient(180deg, rgba(255,255,255,0.1), rgba(0,0,0,0.34));
+  transform: perspective(520px) rotateX(6deg);
+  transform-origin: top;
+}
+
+.shootout-ball {
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.95) 0 9%, transparent 10%),
+    radial-gradient(circle at 34% 30%, #ffffff 0 17%, #e8eef5 18% 43%, #aeb9c5 70%, #6f7b88 100%);
+}
+
+.shootout-ball::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 9999px;
+  border: 2px solid rgba(0, 0, 0, 0.38);
+  clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
+}
+
+.shootout-ball::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 9999px;
+  background:
+    linear-gradient(32deg, transparent 0 45%, rgba(0, 0, 0, 0.22) 46% 49%, transparent 50%),
+    linear-gradient(122deg, transparent 0 45%, rgba(0, 0, 0, 0.2) 46% 49%, transparent 50%);
+}
+
+.shootout-camera-hit {
+  animation: shootoutCameraHit 0.42s ease-out;
+}
+
+.shootout-hud {
+  background:
+    linear-gradient(135deg, rgba(0, 240, 255, 0.14), rgba(255, 255, 255, 0.045) 42%, rgba(50, 255, 126, 0.08)),
+    rgba(1, 7, 20, 0.64);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 34px rgba(0, 240, 255, 0.14);
+}
+
+.shootout-power-track {
+  background:
+    linear-gradient(0deg, #32ff7e 0 42%, #ffd84d 43% 72%, #ff3d57 73% 100%);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+}
+
+.shootout-vignette {
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 0 52%, rgba(0, 0, 0, 0.62) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 24%, rgba(0, 0, 0, 0.36));
+}
+
+.shootout-fab-pulse {
+  animation: shootoutPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes shootoutBeam {
+  from { opacity: 0.32; transform: rotate(-10deg) scaleY(0.92); }
+  to { opacity: 0.72; transform: rotate(7deg) scaleY(1.08); }
+}
+
+@keyframes shootoutFog {
+  from { opacity: 0.45; transform: translate3d(-1.5%, 0, 0); }
+  to { opacity: 0.78; transform: translate3d(1.5%, -1%, 0); }
+}
+
+@keyframes shootoutCameraHit {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  28% { transform: translate3d(4px, -3px, 0) scale(1.006); }
+  60% { transform: translate3d(-3px, 2px, 0) scale(1.002); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes shootoutPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(0, 240, 255, 0.34),
+      0 0 26px rgba(0, 240, 255, 0.42);
+  }
+  50% {
+    box-shadow:
+      0 0 0 12px rgba(0, 240, 255, 0),
+      0 0 42px rgba(50, 255, 126, 0.5);
+  }
+}

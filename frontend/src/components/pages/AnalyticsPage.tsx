@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { PageHeader, SectionTitle } from "../ui/SectionTitle";
 import { GlassCard } from "../ui/GlassCard";
 import { CountUp } from "../ui/CountUp";
-import { TEAMS, ACCURACY_TREND, type Confederation, sumGoals, avg } from "@/data/mockData";
+import { TEAMS, type Confederation, sumGoals, avg } from "@/data/mockData";
 import {
   Radar,
   RadarChart,
@@ -15,9 +15,6 @@ import {
   YAxis,
   Tooltip,
   Cell,
-  AreaChart,
-  Area,
-  CartesianGrid,
 } from "recharts";
 import { CHART_COLORS, tooltipStyle } from "../charts/ChartTheme";
 import TeamFlag from "../ui/TeamFlag";
@@ -251,42 +248,6 @@ export function AnalyticsPage() {
               </div>
             </GlassCard>
           </div>
-
-          <GlassCard>
-            <SectionTitle
-              eyebrow="Model performance"
-              title="Prediction Accuracy"
-              className="mb-4"
-            />
-            <div className="h-60">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={ACCURACY_TREND}>
-                  <defs>
-                    <linearGradient id="acc" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={CHART_COLORS.cyan} stopOpacity={0.5} />
-                      <stop offset="100%" stopColor={CHART_COLORS.cyan} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid stroke={CHART_COLORS.grid} vertical={false} />
-                  <XAxis dataKey="month" stroke={CHART_COLORS.muted} fontSize={11} />
-                  <YAxis
-                    stroke={CHART_COLORS.muted}
-                    fontSize={11}
-                    domain={[70, 100]}
-                    tickFormatter={(v) => `${v}%`}
-                  />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${v}%`} />
-                  <Area
-                    type="monotone"
-                    dataKey="accuracy"
-                    stroke={CHART_COLORS.cyan}
-                    strokeWidth={2.5}
-                    fill="url(#acc)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </GlassCard>
 
           <GlassCard>
             <SectionTitle eyebrow="Sentiment heatmap" title="All Teams" className="mb-4" />

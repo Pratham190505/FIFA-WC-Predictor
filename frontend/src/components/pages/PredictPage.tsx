@@ -10,6 +10,7 @@ import { TEAMS, teamById, sumGoals } from "@/data/mockData";
 import { useApp } from "@/store/appContext";
 import TeamFlag from "../ui/TeamFlag";
 import { usePredict } from "../../hooks/usePredict";
+import { ShootoutFloatingButton } from "@/features/penaltyShootout";
 
 
 
@@ -387,6 +388,7 @@ export function PredictPage() {
           </div>
         </GlassCard>
       </section>
+      <ShootoutFloatingButton />
     </div>
   );
 }

@@ -40,17 +40,7 @@ export function HomePage() {
         </motion.div>
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center w-full">
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6"
-            >
-              <Sparkles size={14} className="text-neon-cyan" />
-              <span className="text-[11px] font-mono uppercase tracking-widest text-text-muted">
-                Powered by AI · 94% accuracy
-              </span>
-            </motion.div>
+            
             <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
@@ -95,47 +85,7 @@ export function HomePage() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="relative animate-float"
           >
-            <GlassCard glow="cyan" className="relative">
-              <div className="flex items-center justify-between mb-5">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-neon-cyan">
-                  Live AI Prediction
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-success">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />{" "}
-                  LIVE
-                </span>
-              </div>
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="text-center">
-                  <div className="mb-2 flex justify-center">
-                    <TeamFlag country={fHome.name} size="xl" />
-                  </div>
-                  <div className="font-display text-xl tracking-wide">{fHome.name}</div>
-                  <div className="font-mono text-3xl mt-1 neon-text">{featured.homeProb}%</div>
-                </div>
-                <div className="font-display text-3xl text-text-muted">VS</div>
-                <div className="text-center">
-                  <div className="mb-2 flex justify-center">
-                    <TeamFlag country={fAway.name} size="xl" />
-                  </div>
-                  <div className="font-display text-xl tracking-wide">{fAway.name}</div>
-                  <div className="font-mono text-3xl mt-1" style={{ color: "var(--neon-violet)" }}>
-                    {featured.awayProb}%
-                  </div>
-                </div>
-              </div>
-              <ProbabilityBar label="Win probability" value={featured.homeProb} color="cyan" />
-              <div className="mt-4 flex items-center justify-between pt-4 border-t border-white/5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-text-muted">
-                  Predicted
-                </span>
-                <span className="font-mono text-2xl font-bold">
-                  {featured.predictedScore[0]}{" "}
-                  <span className="text-text-muted">—</span>{" "}
-                  {featured.predictedScore[1]}
-                </span>
-              </div>
-            </GlassCard>
+            
             <div className="absolute -inset-4 -z-10 bg-linear-to-br from-neon-cyan/20 to-neon-violet/20 blur-3xl rounded-full" />
           </motion.div>
         </div>
