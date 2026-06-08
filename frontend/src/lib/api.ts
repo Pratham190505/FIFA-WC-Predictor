@@ -72,7 +72,7 @@ export const teamsAPI = {
     ),
 };
 
-// ── Players ───────────────────────────────────────────────
+// ── Players ──────────────────────────────────────────────
 export const playersAPI = {
   getByTeam: (team: string, limit = 25) =>
     api.get(`/players/team/${encodeURIComponent(team)}?limit=${limit}`),
