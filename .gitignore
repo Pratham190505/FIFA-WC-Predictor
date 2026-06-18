@@ -41,6 +41,7 @@ __pycache__/
 
 # Environment variables
 .env
+frontend/.env
 
 # Large model/data files
 *.pt
