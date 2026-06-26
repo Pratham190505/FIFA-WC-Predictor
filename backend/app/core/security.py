@@ -39,7 +39,6 @@ def hash_password(password: str) -> str:
 
     return pwd_context.hash(password)
 
-
 def verify_password(plain: str, hashed: str) -> bool:
 
     
@@ -47,8 +46,6 @@ def verify_password(plain: str, hashed: str) -> bool:
     plain = plain[:72]
 
     return pwd_context.verify(plain, hashed)
-
-
 # -------------------------------------------------------------------
 
 # JWT TOKENS

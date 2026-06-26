@@ -102,6 +102,10 @@ async def login_user(data: UserLogin) -> dict:
 
     user = await db.users.find_one({"email": data.email})
 
+    print("Email:", data.email)
+    print("Password:", data.password)
+    print("Password length:", len(data.password))
+    
     if not user or not verify_password(data.password, user["password"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
