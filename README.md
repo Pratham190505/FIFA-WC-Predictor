@@ -122,17 +122,18 @@ cd FIFA-WC-Predictor
 
 ```bash
 cd backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
 
-The API will be available at:
+# Build the Docker image
+docker buildx build --load -t fifa-backend:latest .
 
-- `http://localhost:8000`
-- `http://localhost:8000/docs`
-- `http://localhost:8000/api/health`
+# Run the backend container
+docker run -p 8000:8000 --env-file .env fifa-backend:latest
+
+Once the container starts successfully, the backend API will be available at:
+
+http://localhost:8000
+http://localhost:8000/docs
+http://localhost:8000/api/health
 
 ### 3. Start the frontend
 
