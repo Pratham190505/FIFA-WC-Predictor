@@ -63,7 +63,7 @@ export const TEAMS: Team[] = [
   ]},
   { id: "POR", name: "Portugal", flag: "🇵🇹", confederation: "UEFA", fifaRank: 6, elo: 2050, form: F("WWLWWDWWWL"), goalsScored: [2,3,1,2,3,1,2,2,3,0], goalsConceded: [0,1,2,1,1,1,0,1,1,2], squadValueM: 970, avgAge: 27.1, sentiment: { positive: 64, neutral: 24, negative: 12 }, players: [
     { name: "Bruno Fernandes", position: "CAM", marketValueM: 75 },
-    { name: "Bernardo Silva", position: "CM", marketValueM: 70 },
+    { name: "Cristiano Ronaldo", position: "ST", marketValueM: 30 },
     { name: "Rafael Leão", position: "LW", marketValueM: 90 },
     { name: "Rúben Dias", position: "CB", marketValueM: 75 },
     { name: "Diogo Costa", position: "GK", marketValueM: 40 },
