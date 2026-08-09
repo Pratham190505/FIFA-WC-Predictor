@@ -1,6 +1,5 @@
-import { Outlet, Link, createRootRoute, HeadContent, Navigate, Scripts, useLocation } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, Navigate, useLocation } from "@tanstack/react-router";
 
-import appCss from "../styles.css?url";
 import { AppProvider, AuthProvider, useAuth } from "../store/appContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/layout/Footer";
@@ -30,53 +29,9 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "FootyVerse" },
-      { name: "description", content: "FootyVerse football intelligence dashboard." },
-      { name: "author", content: "FootyVerse" },
-      { property: "og:title", content: "FootyVerse" },
-      { property: "og:description", content: "FootyVerse football intelligence dashboard." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@FootyVerse" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        href: "/favicon.png",
-      },
-      {
-        rel: "apple-touch-icon",
-        href: "/favicon.png",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
 });
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   return (
